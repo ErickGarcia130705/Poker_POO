@@ -6,66 +6,64 @@ public class PokerControlador {
     private Usuario[] jugadores;
 
     public PokerControlador() {
-        Carta[] cartasIniciales = new Carta[0];
-        this.dealer = new Dealer(cartasIniciales, "Ninguna");
-        this.jugadores = new Usuario[0];
-        this.mesa = new Mesa(jugadores, cartasIniciales, dealer);
+        inicializarPartida();
     }
 
-    public void configurarPartida(Usuario[] jugadores, Carta[] mazoDealer) {
-        this.jugadores = jugadores;
-        this.dealer = new Dealer(mazoDealer, "Ninguna");
-        this.mesa = new Mesa(jugadores, mazoDealer, dealer);
+    private void inicializarPartida() {
+
+        Carta c1 = new Carta("Corazón", "Rojo", 5);
+        Carta c2 = new Carta("Pica", "Negro", 10);
+        Carta[] mazoDealer = {c1, c2};
+
+        Usuario usuario = new Usuario(mazoDealer, 100.0f);
+        jugadores = new Usuario[]{usuario};
+
+        dealer = new Dealer(mazoDealer, "Ninguna");
+        mesa = new Mesa(jugadores, mazoDealer, dealer);
     }
 
-    public void iniciarRonda() {
+    public String iniciarRonda() {
+        StringBuilder resultado = new StringBuilder();
+
         if (mesa.cantidadUsuario()) {
-            System.out.println("Iniciando nueva ronda...");
-            
+            resultado.append("Iniciando nueva ronda...\n");
+
             for (Usuario jugador : jugadores) {
                 Carta[] cartasRepartidas = dealer.repartir();
-                jugador.setMano(cartasRepartidas); 
-                System.out.println("Jugador: " + jugador.jugadas());
+                jugador.setMano(cartasRepartidas);
+                resultado.append("Jugador: ").append(jugador.jugadas()).append("\n");
             }
-            evaluarJugadas();
+
+            resultado.append(evaluarJugadas());
         } else {
-            System.out.println("No hay jugadores en la mesa.");
+            resultado.append("No hay jugadores en la mesa.\n");
         }
+
+        return resultado.toString();
     }
 
-    private void evaluarJugadas() {
+    private String evaluarJugadas() {
+        StringBuilder resultado = new StringBuilder();
+
         for (Usuario jugador : jugadores) {
             Mano mano = new Mano(jugador.getMano());
-            String resultado = "Resultado: " + 
-                               "Color: " + mano.color() + ", " +
-                               "Escalera: " + mano.escalera() + ", " +
-                               "Par: " + mano.par();
-            
-            System.out.println("Evaluación para jugador con $" + jugador.getDinero() + ": " + resultado);
+            String evaluacion = "Resultado: " +
+                                "Color: " + mano.color() + ", " +
+                                "Escalera: " + mano.escalera() + ", " +
+                                "Par: " + mano.par();
+
+            resultado.append("Evaluación para jugador con $")
+                     .append(jugador.getDinero())
+                     .append(": ")
+                     .append(evaluacion)
+                     .append("\n");
         }
+
+        return resultado.toString();
     }
 
-    public void cambiarDealer(Dealer nuevoDealer) {
-        this.dealer = mesa.cambioDealer(nuevoDealer);
-        System.out.println("Nuevo dealer asignado.");
-    }
-
-    public void reiniciarJuego() {
-        if (mesa.reiniciar()) {
-            this.jugadores = new Usuario[0];
-            System.out.println("Juego reiniciado con éxito.");
-        }
-    }
-
-    public Mesa getMesa() {
-        return mesa;
-    }
-
-    public Dealer getDealer() {
-        return dealer;
-    }
-
-    public Usuario[] getJugadores() {
-        return jugadores;
+    public boolean hayUsuariosEnMesa() {
+        return mesa.cantidadUsuario();
     }
 }
+
