@@ -10,7 +10,6 @@ public class PokerControlador {
     }
 
     private void inicializarPartida() {
-
         Carta c1 = new Carta("Corazón", "Rojo", 5);
         Carta c2 = new Carta("Pica", "Negro", 10);
         Carta[] mazoDealer = {c1, c2};
@@ -65,5 +64,8 @@ public class PokerControlador {
     public boolean hayUsuariosEnMesa() {
         return mesa.cantidadUsuario();
     }
-}
 
+    public boolean reiniciarJuego() {
+        return mesa.reiniciar();
+    }
+}

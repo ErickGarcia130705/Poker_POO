@@ -12,8 +12,13 @@ public class Mesa {
     }
 
     public boolean reiniciar() {
-        System.out.println("Reiniciando juego...");
-        return true;
+        if (jugadores != null && jugadores.length > 0) {
+            for (Usuario jugador : jugadores) {
+                jugador.setMano(new Carta[0]);
+            }
+            return true;
+        }
+        return false;
     }
 
     public boolean cantidadUsuario() {

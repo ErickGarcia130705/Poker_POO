@@ -7,6 +7,12 @@ public class Main {
         String resultadoRonda = controlador.iniciarRonda();
         System.out.println(resultadoRonda);
 
-        System.out.println("Hay usuarios en la mesa?: " + controlador.hayUsuariosEnMesa());
+        System.out.println("Hay usuarios en la mesa: " + controlador.hayUsuariosEnMesa());
+
+        if (controlador.reiniciarJuego()) {
+            System.out.println("Juego reiniciado con exito.");
+        } else {
+            System.out.println("No se pudo reiniciar el juego.");
+        }
     }
 }
